@@ -1,0 +1,81 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int dr[] = {-1, 1, 0, 0};
+int dc[] = {0, 0, -1, 1};
+
+void dfs(int i, int j, vector<string> &s, vector<vector<bool>> &visited, int &componentSize)
+{
+    componentSize++;
+    visited[i][j] = true;
+    for (int k = 0; k < 4; k++)
+    {
+        int newi = i + dr[k];
+        int newj = j + dc[k];
+        // if (isValid(newi, newj, s, visited))
+        if (newi >= 0 && newi < s.size() && newj >= 0 && newj < s[0].size() && s[newi][newj] == '1' && !visited[newi][newj])
+        {
+            dfs(newi, newj, s, visited, componentSize);
+        }
+    }
+}
+
+// {
+//     visited[i][j] = true;
+//     for (int k = 0; k < 4; k++)
+//     {
+//         int newi = i + dr[k];
+//         int newj = j + dc[k];
+//         // if (isValid(newi, newj, s, visited))
+//         if (newi >= 0 && newi < s.size() && newj >= 0 && newj < s[0].size() && s[newi][newj] == '1' && !visited[newi][newj])
+//         {
+//             dfs(newi, newj, s, visited, componentSize);
+//         }
+//     }
+// }
+
+int main()
+{
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        int n, m;
+        cin >> n >> m;
+        vector<string> s(n);
+        for (int i = 0; i < n; i++)
+        {
+            cin >> s[i];
+        }
+
+        vector<vector<bool>> visited(n, vector<bool>(m, false));
+        int counter = 0;
+
+        vector<int> componentSizes;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+
+                if (s[i][j] == '1' && !visited[i][j])
+                {
+                    int componentSize = 0;
+                    dfs(i, j, s, visited, componentSize);
+                    counter++;
+                    componentSizes.push_back(componentSize);
+                }
+            }
+        }
+        int sum = 0;
+        sort(componentSizes.rbegin(), componentSizes.rend());
+            for (int i = 1; i < componentSizes.size(); i += 2)
+            {
+                sum = sum + componentSizes[i];
+            }
+            cout << sum << endl;
+
+       
+    }
+}
